@@ -1,4 +1,3 @@
-version: '3.9'
 services: # every service takes its own container
   # postgresql databse
   app:
