@@ -1,0 +1,23 @@
+version: '3.9'
+services: # every service takes its own container
+  # postgresql databse
+  pgdb:
+    image: 'postgres:14.5'
+    ports: 
+      - 5302:5302 # <port for our machine>:<port for container to retrieve>
+    env_file:
+      - .env
+    environment:
+       POSTGRES_USER: postgres
+       POSTGRES_PASSWORD: example
+       POSTGRES_DB: some-postgres
+
+  pgadmin:
+    image: 'dpage/pgadmin4'
+    ports: 
+      - 15433:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pierce77@bu.edu
+      PGADMIN_DEFAULT_PASSWORD: example
+    depends_on:
+      - pgdb
