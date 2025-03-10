@@ -1,29 +1,39 @@
 services: # every service takes its own container
   # postgresql databse
   app:
+    container_name: 'backend'
     build:
       context: .
       dockerfile: Dockerfile 
     ports: 
       - 8080:8080
 
-  pgdb:
+  db:
     image: 'postgres:14.5'
+    container_name: 'database'
     ports: 
-      - 5302:5302 # <port for our machine>:<port for container to retrieve>
-    env_file:
-      - .env
+      - 5302:5432 # <port for our machine>:<port for container to retrieve>
     environment:
        POSTGRES_USER: postgres
        POSTGRES_PASSWORD: example
        POSTGRES_DB: some-postgres
+    volumes:
+          - data:/var/lib/postgresql/data  # Mount a volume to the PostgreSQL data directory
+    restart: always
 
   pgadmin:
     image: 'dpage/pgadmin4'
+    container_name: 'admin'
     ports: 
       - 15433:80
     environment:
       PGADMIN_DEFAULT_EMAIL: pierce77@bu.edu
       PGADMIN_DEFAULT_PASSWORD: example
+    user: "${UID}:${GID}" # prevent permission issues accessing data volume
+    volumes:
+      - data:/var/lib/pgadmin
     depends_on:
-      - pgdb
+      - db
+
+volumes:
+  data:
