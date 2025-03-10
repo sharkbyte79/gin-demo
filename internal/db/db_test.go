@@ -15,10 +15,10 @@ func TestConnect(t *testing.T) {
 }
 
 // Test if pinging the database returns an error
-func TestConnect2(t *testing.T) {
+func TestConnectPing(t *testing.T) {
 	conn, err := Connect()
 
-	if err != nil || conn.Ping(context.TODO()) != nil {
+	if err != nil || conn.Ping(context.Background()) != nil {
 		t.Errorf("got %v", err)
 	}
 	defer conn.Close(context.TODO())
