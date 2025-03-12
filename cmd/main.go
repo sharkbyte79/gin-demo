@@ -12,7 +12,7 @@ import (
 func main() {
 	r := gin.Default()
 
-	err := db.ConnectToDatabase()
+	_, err := db.Connect()
 
 	if err != nil {
 		// Kill the process if connection to postgres failed
